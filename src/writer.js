@@ -1,8 +1,8 @@
 'use strict';
 
+const ansiColors = require('ansi-colors');
 const fs = require('fs');
 const path = require('path');
-const stripAnsi = require('strip-ansi');
 
 /**
  * Creates the output folder and writes formatted text to a file.
@@ -19,7 +19,7 @@ module.exports = function writer(text, dest, destRoot = process.cwd()) {
       if (mkdirpError) {
         reject(mkdirpError);
       } else {
-        fs.writeFile(fullpath, stripAnsi(text), fsWriteFileError => {
+        fs.writeFile(fullpath, ansiColors.unstyle(text), fsWriteFileError => {
           if (fsWriteFileError) {
             reject(fsWriteFileError);
           } else {

@@ -1,6 +1,6 @@
 'use strict';
 
-const chalk = require('chalk');
+const ansiColors = require('ansi-colors');
 const fs = require('fs');
 const path = require('path');
 const test = require('tape');
@@ -64,18 +64,18 @@ test('writer should write to a base folder if it is specified', t => {
     });
 });
 
-test('writer should strip chalk colors from formatted output', t => {
+test('writer should strip colors from formatted output', t => {
   stub(process, 'cwd').returns(tmpDir);
   const reportFilePath = path.join(process.cwd(), 'foo.txt');
 
   t.plan(1);
 
-  writer(chalk.blue('footext'), 'foo.txt')
+  writer(ansiColors.blue('footext'), 'foo.txt')
     .then(() => {
       t.equal(
         fs.readFileSync(reportFilePath, 'utf8'),
         'footext',
-        'chalk colors have been stripped in report file'
+        'colors have been stripped in report file'
       );
     })
     .catch(e => t.fail(`failed to create report file: ${e.message}`))
