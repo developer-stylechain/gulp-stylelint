@@ -1,14 +1,18 @@
-'use strict';
+import gulp from 'gulp';
+import gulpCleanCss from 'gulp-clean-css';
+import gulpConcat from 'gulp-concat';
+import gulpRename from 'gulp-rename';
+import gulpSourcemaps from 'gulp-sourcemaps';
+import path from 'path';
+import test from 'tape';
 
-const gulp = require('gulp');
-const gulpCleanCss = require('gulp-clean-css');
-const gulpConcat = require('gulp-concat');
-const gulpRename = require('gulp-rename');
-const gulpSourcemaps = require('gulp-sourcemaps');
-const path = require('path');
-const test = require('tape');
+import gulpStylelint from '../src/index.js';
 
-const gulpStylelint = require('../src/index');
+import { URL } from 'url'; // in Browser, the URL in native accessible on window
+// Will contain trailing slash
+const __dirname = new URL('.', import.meta.url).pathname;
+
+const tmpDir = path.resolve(__dirname, '../tmp');
 
 /**
  * Creates a full path to the fixtures glob.

@@ -2,7 +2,8 @@
   "name": "@ronilaukkarinen/gulp-stylelint",
   "version": "15.0.0",
   "description": "Gulp plugin for running Stylelint results through various reporters.",
-  "main": "src/index.js",
+  "exports": "./src/index.js",
+  "type": "module",
   "files": [
     "/src/*.js"
   ],

@@ -1,12 +1,15 @@
-'use strict';
+import ansiColors from 'ansi-colors';
+import fs from 'fs';
+import path from 'path';
+import test from 'tape';
+import { stub } from 'sinon';
 
-const ansiColors = require('ansi-colors');
-const fs = require('fs');
-const path = require('path');
-const test = require('tape');
-const {stub} = require('sinon');
+import writer from '../src/writer.js';
 
-const writer = require('../src/writer');
+import { URL } from 'url'; // in Browser, the URL in native accessible on window
+
+// Will contain trailing slash
+const __dirname = new URL('.', import.meta.url).pathname;
 
 const tmpDir = path.resolve(__dirname, '../tmp');
 

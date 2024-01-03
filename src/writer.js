@@ -1,8 +1,6 @@
-'use strict';
-
-const ansiColors = require('ansi-colors');
-const fs = require('fs');
-const path = require('path');
+import ansiColors from 'ansi-colors';
+import fs from 'fs';
+import path from 'path';
 
 /**
  * Creates the output folder and writes formatted text to a file.
@@ -11,7 +9,7 @@ const path = require('path');
  * @param {String} [destRoot] - Destination root folder, defaults to cwd.
  * @return {Promise} Resolved when folder is created and file is written.
  */
-module.exports = function writer(text, dest, destRoot = process.cwd()) {
+export default function writer(text, dest, destRoot = process.cwd()) {
   const fullpath = path.resolve(destRoot, dest);
 
   return new Promise((resolve, reject) => {
