@@ -1,6 +1,4 @@
-'use strict';
-
-const {TraceMap, originalPositionFor} = require('@jridgewell/trace-mapping');
+import {TraceMap, originalPositionFor} from '@jridgewell/trace-mapping';
 
 /**
  * Applies a sourcemap to Stylelint result.
@@ -9,7 +7,7 @@ const {TraceMap, originalPositionFor} = require('@jridgewell/trace-mapping');
  * @param {Object} sourceMap - Sourcemap object.
  * @return {Object} Rewritten Stylelint result.
  */
-module.exports = async function applySourcemap(lintResult, sourceMap) {
+export default async function applySourcemap(lintResult, sourceMap) {
   const sourceMapConsumer = new TraceMap(sourceMap);
 
   lintResult.results = lintResult.results.reduce((memo, result) => {

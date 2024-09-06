@@ -1,17 +1,17 @@
-'use strict';
+import PluginError from 'plugin-error';
+import { Transform } from 'stream';
+import stylelint from 'stylelint';
 
-const PluginError = require('plugin-error');
-const { Transform } = require("stream");
-const {formatters, lint} = require('stylelint');
-
-const applySourcemap = require('./apply-sourcemap');
-const reporterFactory = require('./reporter-factory');
+import applySourcemap from './apply-sourcemap.js';
+import reporterFactory from './reporter-factory.js';
 
 /**
  * Name of this plugin for reporting purposes.
  * @type {String}
  */
 const pluginName = 'gulp-stylelint';
+
+const { lint } = stylelint;
 
 /**
  * Stylelint results processor.
@@ -22,7 +22,7 @@ const pluginName = 'gulp-stylelint';
  * @param {Boolean} [options.debug] - If true, error stack will be printed.
  * @return {Stream} Object stream usable in Gulp pipes.
  */
-module.exports = function gulpStylelint(options) {
+export default function gulpStylelint(options) {
 
   /**
    * Plugin options with defaults applied.
@@ -102,8 +102,8 @@ module.exports = function gulpStylelint(options) {
           lintResult
       )
       .then(lintResult => {
-        if (lintOptions.fix && lintResult.output) {
-          file.contents = Buffer.from(lintResult.output);
+        if (lintOptions.fix && lintResult.code) {
+          file.contents = Buffer.from(lintResult.code);
         }
 
         done(null, file);
@@ -194,4 +194,5 @@ module.exports = function gulpStylelint(options) {
  * @see https://github.com/olegskl/gulp-stylelint/issues/3#issuecomment-197025044
  * @type {Object}
  */
-module.exports.formatters = formatters;
+gulpStylelint.formatters = stylelint.formatters;
+

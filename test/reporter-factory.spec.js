@@ -1,10 +1,8 @@
-'use strict';
+import fancyLog from 'fancy-log';
+import test from 'tape';
+import { stub } from 'sinon';
 
-const fancyLog = require('fancy-log');
-const test = require('tape');
-const {stub} = require('sinon');
-
-const reporterFactory = require('../src/reporter-factory');
+import reporterFactory from '../src/reporter-factory.js';
 
 test('reporter factory should return a function', t => {
   t.plan(1);

@@ -4,7 +4,8 @@ module.exports = {
     node: true,
     es6: true
   },
-  "parserOptions": {
-    "ecmaVersion": 8
+  parserOptions: {
+    sourceType: "module",
+    ecmaVersion: 15
   }
 };

@@ -1,12 +1,17 @@
-'use strict';
+import fs from 'fs';
+import gulp from 'gulp';
+import gulpSourcemaps from 'gulp-sourcemaps';
+import path from 'path';
+import test from 'tape';
 
-const fs = require('fs');
-const gulp = require('gulp');
-const gulpSourcemaps = require('gulp-sourcemaps');
-const path = require('path');
-const test = require('tape');
+import gulpStylelint from '../src/index.js';
 
-const gulpStylelint = require('../src/index');
+import { URL } from 'url'; // in Browser, the URL in native accessible on window
+
+// Will contain trailing slash
+const __dirname = new URL('.', import.meta.url).pathname;
+
+const tmpDir = path.resolve(__dirname, '../tmp');
 
 /**
  * Creates a full path to the fixtures glob.
@@ -48,7 +53,7 @@ test('should emit an error when linter complains', t => {
   gulp
     .src(fixtures('invalid.css'))
     .pipe(gulpStylelint({config: {rules: {
-      'color-hex-case': 'lower'
+      'color-hex-length': 'long'
     }}}))
     .on('error', () => t.pass('error has been emitted correctly'));
 });
@@ -58,7 +63,7 @@ test('should ignore file', t => {
   gulp
     .src([fixtures('basic.css'), fixtures('invalid.css')])
     .pipe(gulpStylelint({
-      config: {rules: {'color-hex-case': 'lower'}},
+      config: {rules: {'color-hex-length': 'long'}},
       ignorePath: fixtures('ignore')
     }))
     .on('finish', () => t.pass('no error emitted'));
@@ -71,21 +76,21 @@ test('should fix the file without emitting errors', t => {
     .pipe(gulpSourcemaps.init())
     .pipe(gulpStylelint({
       fix: true,
-      config: {rules: {'color-hex-case': 'lower'}}
+      config: {rules: {'color-hex-length': 'long'}}
     }))
     .pipe(gulp.dest(path.resolve(__dirname, '../tmp')))
     .on('error', error => t.fail(`error ${error} has been emitted`))
     .on('finish', () => {
       t.equal(
         fs.readFileSync(path.resolve(__dirname, '../tmp/invalid.css'), 'utf8'),
-        '.foo {\n  color: #fff;\n}\n',
+        '.foo {\n  color: #FFFFFF;\n}\n',
         'report file has fixed contents'
       );
       t.pass('no error emitted');
     });
 });
 
-test('should expose an object with stylelint formatter functions', t => {
+test('should expose an object with stylelint formatter promises', t => {
   t.plan(2);
   t.equal(typeof gulpStylelint.formatters, 'object', 'formatters property is an object');
 
@@ -93,5 +98,5 @@ test('should expose an object with stylelint formatter functions', t => {
     .keys(gulpStylelint.formatters)
     .map(fName => gulpStylelint.formatters[fName]);
 
-  t.true(formatters.every(f => typeof f === 'function'), 'all formatters are functions');
+  t.true(formatters.every(f => typeof f.then === 'function'), 'all formatters are promises');
 });
