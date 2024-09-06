@@ -12,25 +12,23 @@ const writer = require('./writer');
  * @return {Function} Reporter.
  */
 module.exports = function reporterFactory(config = {}, options = {}) {
-
-  /**
-   * Formatter for stylelint results.
-   *
-   * User has a choice of passing a custom formatter function,
-   * or a name of formatter bundled with stylelint by default.
-   *
-   * @type {Function}
-   */
-  const formatter = typeof config.formatter === 'string' ?
-    formatters[config.formatter] :
-    config.formatter;
-
   /**
    * Reporter.
    * @param {[Object]} results - Array of stylelint results.
    * @return {Promise} Resolved when writer and logger are done.
    */
-  return function reporter(results) {
+  return async function reporter(results) {
+    /**
+     * Formatter for stylelint results.
+     *
+     * User has a choice of passing a custom formatter function,
+     * or a name of formatter bundled with stylelint by default.
+     *
+     * @type {Function}
+     */
+    const formatter = typeof config.formatter === 'string' ?
+      await formatters[config.formatter] :
+      config.formatter;
 
     /**
      * Async tasks performed by the reporter.
